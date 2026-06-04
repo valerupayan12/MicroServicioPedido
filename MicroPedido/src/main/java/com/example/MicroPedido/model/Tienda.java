@@ -8,21 +8,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
-@Entity //se conecta con entidad
-@Table(name="tienda") //la tabla nombre persona
+@Entity
+@Table(name="tienda")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Tienda {
+
     @Id
     private int id_tienda;
+
     @Column(name="nombre", nullable=false)
     private String nombre;
+
     @Column(name="direccion", nullable=false)
     private String direccion;
+
     @Column(name="id_comuna", nullable=false)
-    private int comuna;
-   
+    private int id_comuna;
 }

@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 
 @SuppressWarnings("unused")
 @RestController
-@RequestMapping("api/v1/pedidos")
+@RequestMapping("api/v2/pedidos")
 public class PedidoController {
     @Autowired
     private PedidoService pedidoService;

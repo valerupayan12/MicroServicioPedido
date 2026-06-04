@@ -9,7 +9,7 @@ import com.example.MicroPedido.model.Categoria;
 import com.example.MicroPedido.service.CategoriaService;
 
 @RestController
-@RequestMapping("api/v1/categorias")
+@RequestMapping("api/v2/categorias")
 public class CategoriaController {
 
     @Autowired

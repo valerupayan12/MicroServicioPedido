@@ -11,7 +11,7 @@ import com.example.MicroPedido.service.DetallePedidoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/detalle_pedidos")
+@RequestMapping("api/v2/detalle_pedidos")
 public class DetallePedidoController {
 
     @Autowired
