@@ -2,44 +2,17 @@ package com.example.MicroPedido.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.MicroPedido.model.Pedido;
-import com.example.MicroPedido.repository.PedidoRepository;
 
-import jakarta.transaction.Transactional;
+public interface PedidoService {
 
-@Service
-@Transactional
-public class PedidoService {
-    @Autowired
-    private PedidoRepository pedidoRepository;
+    List<Pedido> getPedidos();
 
-    //
-    public List<Pedido> getPedidos(){
-        return pedidoRepository.obtenerPedidos();
-    }
-    //buscar
-    public Pedido getPedido(int id_pedido){
-        Pedido pedidos = pedidoRepository.buscarPedido(id_pedido);
-        if (pedidos!=null) {
-        return pedidos;
-        }else
-        return new Pedido();
-    }
-    //eliminar
-    public int deletePedido(int id_pedido){
-        pedidoRepository.delete(getPedido(id_pedido));
-        return 1;
-    }
-    //guardar
-    public Pedido savePedido(Pedido pedido){
-        return pedidoRepository.save(pedido);
-    }
-    //modificar
-    public int updatePedido(Pedido pedido){
-        pedidoRepository.save(pedido);
-        return 1;
-    }
+    Pedido getPedido(int id_pedido);
+
+    Pedido savePedido(Pedido pedido);
+
+    int updatePedido(Pedido pedido);
+
+    int deletePedido(int id_pedido);
 }
