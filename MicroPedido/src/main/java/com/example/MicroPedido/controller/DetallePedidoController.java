@@ -3,51 +3,50 @@ package com.example.MicroPedido.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.MicroPedido.model.DetallePedido;
 import com.example.MicroPedido.service.DetallePedidoService;
 
 import jakarta.validation.Valid;
 
-@SuppressWarnings("unused")
 @RestController
 @RequestMapping("api/v1/detalle_pedidos")
 public class DetallePedidoController {
+
     @Autowired
     private DetallePedidoService detallePedidoService;
 
-    @GetMapping 
-    public List<DetallePedido> listarDetallePedidos(){
+    // LISTAR TODOS
+    @GetMapping
+    public List<DetallePedido> listarDetallePedidos() {
         return detallePedidoService.getDetallesPedido();
     }
 
-    //agregar
+    // AGREGAR
     @PostMapping
-    public DetallePedido agregarDetallePedido(@Valid @RequestBody DetallePedido detallePedido){
+    public DetallePedido agregarDetallePedido(@Valid @RequestBody DetallePedido detallePedido) {
         return detallePedidoService.saveDetallePedido(detallePedido);
     }
-    //buscar
-    @GetMapping("{id_detalle_pedido}")
-    public DetallePedido buscrDetallePedido(@PathVariable int id_detalle_pedido){
-        return detallePedidoService.getDetallePedidoById(id_detalle_pedido);
+
+    // BUSCAR
+    @GetMapping("{id_detalle}")
+    public DetallePedido buscarDetallePedido(@PathVariable int id_detalle) {
+        return detallePedidoService.getDetallePedidoById(id_detalle);
     }
-    //actualizar
-    @PutMapping("{id_detalle_pedido}")
-    public  int actualizarDetallePedido(@PathVariable int id_detalle_pedido, @Valid @RequestBody DetallePedido detallePedido){
+
+    // ACTUALIZAR
+    @PutMapping("{id_detalle}")
+    public int actualizarDetallePedido(@PathVariable int id_detalle,
+            @Valid @RequestBody DetallePedido detallePedido) {
+        detallePedido.setId_detalle(id_detalle);
         return detallePedidoService.updateDetallePedido(detallePedido);
     }
-    //eliminar
-    @DeleteMapping("{id_detalle_pedido}")
-    public String eliminarDetallePedido(@PathVariable int id_detalle_pedido){
-        if(detallePedidoService.deleteDetallePedido(id_detalle_pedido)==1){
+
+    // ELIMINAR
+    @DeleteMapping("{id_detalle}")
+    public String eliminarDetallePedido(@PathVariable int id_detalle) {
+        if (detallePedidoService.deleteDetallePedido(id_detalle) == 1) {
             return "Detalle pedido eliminado correctamente";
         }
         return "Error al eliminar el detalle del pedido";

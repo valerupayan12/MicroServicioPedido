@@ -2,16 +2,10 @@ package com.example.MicroPedido.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.example.MicroPedido.dto.ClienteDTO;
 
-import jakarta.transaction.Transactional;
-
-@Service
-@Transactional
 public interface ClienteService {
-    
+
     List<ClienteDTO.Response> listarClientes();
 
     ClienteDTO.Response buscarPorId(int id_cliente);

@@ -8,11 +8,10 @@ import com.example.MicroPedido.model.Producto;
 import java.util.List;
 
 @Repository
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface ProductoRepository extends JpaRepository<Producto, Integer> { // ✅ Long → Integer
 
-    List<Producto> findByCategoria(String categoria);
 
-    List<Producto> findByEstado(boolean estado);
+    List<Producto> findByEstado(boolean estado); // campo existe
 
-    boolean existsByNombreIgnoreCase(String nombre);
+    boolean existsByNombreIgnoreCase(String nombre); //  campo existe
 }

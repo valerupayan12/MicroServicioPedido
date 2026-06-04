@@ -12,51 +12,43 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v2/cupones_descuento")
-
 public class CuponDescuentoController {
 
     @Autowired
     private CuponDescuentoService cuponDescuentoService;
 
+    // LISTAR TODOS
     @GetMapping
     public List<CuponDescuento> listarCuponDescuentos() {
         return cuponDescuentoService.getAllCupones();
     }
 
-    // agregar
+    // AGREGAR
     @PostMapping
-    public CuponDescuento agregarCuponDescuento(
-            @Valid @RequestBody CuponDescuento cuponDescuento) {
-
+    public CuponDescuento agregarCuponDescuento(@Valid @RequestBody CuponDescuento cuponDescuento) {
         return cuponDescuentoService.saveCuponDescuento(cuponDescuento);
     }
 
-    // buscar
-    @GetMapping("{id_cupon_descuento}")
-    public CuponDescuento buscarCuponDescuento(
-            @PathVariable int id_cupon_descuento) {
-
-        return cuponDescuentoService.getCuponDescuentoById(id_cupon_descuento);
+    // BUSCAR
+    @GetMapping("{id_cupon}")
+    public CuponDescuento buscarCuponDescuento(@PathVariable int id_cupon) {
+        return cuponDescuentoService.getCuponDescuentoById(id_cupon);
     }
 
-    // actualizar
-    @PutMapping("{id_cupon_descuento}")
-    public int actualizarCuponDescuento(
-            @PathVariable int id_cupon_descuento,
+    // ACTUALIZAR
+    @PutMapping("{id_cupon}")
+    public int actualizarCuponDescuento(@PathVariable int id_cupon,
             @Valid @RequestBody CuponDescuento cuponDescuento) {
-
+        cuponDescuento.setId_cupon(id_cupon); // ← asigna el id del path
         return cuponDescuentoService.updateCuponDescuento(cuponDescuento);
     }
 
-    // eliminar
-    @DeleteMapping("{id_cupon_descuento}")
-    public String eliminarCuponDescuento(
-            @PathVariable int id_cupon_descuento) {
-
-        if (cuponDescuentoService.deleteCuponDescuento(id_cupon_descuento) == 1) {
+    // ELIMINAR
+    @DeleteMapping("{id_cupon}")
+    public String eliminarCuponDescuento(@PathVariable int id_cupon) {
+        if (cuponDescuentoService.deleteCuponDescuento(id_cupon) == 1) {
             return "Cupon de descuento eliminado correctamente";
         }
-
         return "Error al eliminar el cupon de descuento";
     }
 }

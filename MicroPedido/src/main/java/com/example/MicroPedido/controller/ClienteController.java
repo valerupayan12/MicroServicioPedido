@@ -3,6 +3,8 @@ package com.example.MicroPedido.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.MicroPedido.model.Cliente;
+import com.example.MicroPedido.dto.ClienteDTO;
 import com.example.MicroPedido.service.ClienteService;
 
 import jakarta.validation.Valid;
@@ -20,47 +22,44 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("api/v1/clientes")
 public class ClienteController {
-      @Autowired
+
+    @Autowired
     private ClienteService clienteService;
 
-    // LISTAR CLIENTES
     @GetMapping
-    public List<Cliente> listarClientes() {
-        return clienteService.listarClientes();
+    public ResponseEntity<List<ClienteDTO.Response>> listarClientes() {
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
-    // AGREGAR CLIENTE
     @PostMapping
-    public Cliente agregarCliente(@Valid @RequestBody Cliente cliente) {
-
-        return clienteService.saveCliente(cliente);
+    public ResponseEntity<ClienteDTO.Response> crearCliente(
+            @Valid @RequestBody ClienteDTO.Request request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(clienteService.crearCliente(request));
     }
 
-    // BUSCAR CLIENTE POR ID
-    @GetMapping("{id_cliente}")
-    public Cliente buscarCliente(@PathVariable int id_cliente) {
-
-        return clienteService.getClienteById(id_cliente);
+    @GetMapping("/{id_cliente}")
+    public ResponseEntity<ClienteDTO.Response> buscarPorId(
+            @PathVariable int id_cliente) {
+        return ResponseEntity.ok(clienteService.buscarPorId(id_cliente));
     }
 
-    // ACTUALIZAR CLIENTE
-    @PutMapping("{id_cliente}")
-    public int actualizarCliente(@PathVariable int id_cliente,
-                                 @Valid @RequestBody Cliente cliente) {
-
-        cliente.setId_cliente(id_cliente);
-
-        return clienteService.updateCliente(cliente);
+    @GetMapping("/nombre/{nombre}")
+    public ResponseEntity<ClienteDTO.Response> buscarPorNombre(
+            @PathVariable String nombre) {
+        return ResponseEntity.ok(clienteService.buscarPorNombre(nombre));
     }
 
-    // ELIMINAR CLIENTE
-    @DeleteMapping("{id_cliente}")
-    public String eliminarCliente(@PathVariable int id_cliente) {
+    @PutMapping("/{id_cliente}")
+    public ResponseEntity<ClienteDTO.Response> actualizarCliente(
+            @PathVariable int id_cliente,
+            @Valid @RequestBody ClienteDTO.Request request) {
+        return ResponseEntity.ok(clienteService.actualizarCliente(id_cliente, request));
+    }
 
-        if (clienteService.deleteCliente(id_cliente) == 1) {
-            return "Cliente eliminado correctamente";
-        }
-
-        return "Error al eliminar el cliente";
+    @DeleteMapping("/{id_cliente}")
+    public ResponseEntity<String> eliminarCliente(@PathVariable int id_cliente) {
+        clienteService.eliminarCliente(id_cliente);
+        return ResponseEntity.ok("Cliente eliminado correctamente");
     }
 }
