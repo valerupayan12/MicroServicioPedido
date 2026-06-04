@@ -5,11 +5,16 @@ import java.util.List;
 import com.example.MicroPedido.dto.ProductoDTO;
 
 public interface ProductoService {
+
     List<ProductoDTO.Response> listarTodos();
-    List<ProductoDTO.Response> listarPorCategoria(String categoria);
+
     List<ProductoDTO.Response> listarActivos();
-    ProductoDTO.Response buscarPorId(Long id);
+
+    ProductoDTO.Response buscarPorId(int id);
+
     ProductoDTO.Response crear(ProductoDTO.Request request);
-    ProductoDTO.Response actualizar(Long id, ProductoDTO.Request request);
-    void eliminar(Long id);
+
+    ProductoDTO.Response actualizar(int id, ProductoDTO.Request request);
+
+    int eliminar(int id);
 }

@@ -1,60 +1,65 @@
 package com.example.MicroPedido.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.MicroPedido.dto.ProductoDTO;
 import com.example.MicroPedido.service.ProductoService;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
-@Slf4j
 @RestController
-@RequestMapping("/api/v1/productos")
-@RequiredArgsConstructor
+@RequestMapping("api/v1/productos")
 public class ProductoController {
 
-    private final ProductoService productoService;
+    @Autowired
+    private ProductoService productoService;
 
+    // LISTAR TODOS
     @GetMapping
-    public ResponseEntity<List<ProductoDTO.Response>> listarTodos() {
-        return ResponseEntity.ok(productoService.listarTodos());
+    public List<ProductoDTO.Response> listarProductos() {
+        return productoService.listarTodos();
     }
 
+    // LISTAR ACTIVOS
     @GetMapping("/activos")
-    public ResponseEntity<List<ProductoDTO.Response>> listarActivos() {
-        return ResponseEntity.ok(productoService.listarActivos());
+    public List<ProductoDTO.Response> listarActivos() {
+        return productoService.listarActivos();
     }
 
-    @GetMapping("/categoria/{categoria}")
-    public ResponseEntity<List<ProductoDTO.Response>> listarPorCategoria(@PathVariable String categoria) {
-        return ResponseEntity.ok(productoService.listarPorCategoria(categoria));
+    // BUSCAR POR ID
+    @GetMapping("{id}")
+    public ProductoDTO.Response buscarProducto(@PathVariable int id) {
+        return productoService.buscarPorId(id);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductoDTO.Response> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(productoService.buscarPorId(id));
-    }
-
+    // CREAR
     @PostMapping
-    public ResponseEntity<ProductoDTO.Response> crear(@Valid @RequestBody ProductoDTO.Request request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.crear(request));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductoDTO.Response> actualizar(
-            @PathVariable Long id,
+    public ProductoDTO.Response crearProducto(
             @Valid @RequestBody ProductoDTO.Request request) {
-        return ResponseEntity.ok(productoService.actualizar(id, request));
+
+        return productoService.crear(request);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        productoService.eliminar(id);
-        return ResponseEntity.noContent().build();
+    // ACTUALIZAR
+    @PutMapping("{id}")
+    public ProductoDTO.Response actualizarProducto(
+            @PathVariable int id,
+            @Valid @RequestBody ProductoDTO.Request request) {
+
+        return productoService.actualizar(id, request);
+    }
+
+    // ELIMINAR
+    @DeleteMapping("{id}")
+    public String eliminarProducto(@PathVariable int id) {
+
+        if (productoService.eliminar(id) == 1) {
+            return "Producto eliminado correctamente";
+        }
+
+        return "Error al eliminar producto";
     }
 }
