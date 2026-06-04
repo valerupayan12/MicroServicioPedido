@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "categoria")
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
