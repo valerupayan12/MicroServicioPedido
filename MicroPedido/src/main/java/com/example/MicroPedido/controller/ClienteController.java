@@ -20,7 +20,7 @@ import com.example.MicroPedido.service.ClienteService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("api/v1/clientes")
+@RequestMapping("api/v2/clientes")
 public class ClienteController {
 
     @Autowired
