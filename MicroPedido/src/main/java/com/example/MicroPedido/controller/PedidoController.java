@@ -12,44 +12,111 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.MicroPedido.model.Pedido;
+import com.example.MicroPedido.entity.Pedido;
 import com.example.MicroPedido.service.PedidoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @SuppressWarnings("unused")
 @RestController
 @RequestMapping("api/v2/pedidos")
+@Tag(name = "Pedidos", description = "API para la gestión de pedidos")
 public class PedidoController {
+
     @Autowired
     private PedidoService pedidoService;
 
     @GetMapping
-    public List<Pedido> listarPedidos(){
+    @Operation(
+            summary = "Listar pedidos",
+            description = "Obtiene todos los pedidos registrados")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Listado obtenido correctamente")
+    })
+    public List<Pedido> listarPedidos() {
         return pedidoService.getPedidos();
     }
-    //agregar
+
+    // agregar
     @PostMapping
-    public Pedido agregarPedido(@Valid @RequestBody Pedido pedido){
+    @Operation(
+            summary = "Crear pedido",
+            description = "Registra un nuevo pedido")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Pedido creado correctamente",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Pedido.class))),
+            @ApiResponse(responseCode = "400",
+                    description = "Datos inválidos")
+    })
+    public Pedido agregarPedido(@Valid @RequestBody Pedido pedido) {
         return pedidoService.savePedido(pedido);
-     }
-    //buscar
-    @GetMapping("/{id_pedido}")
-    public Pedido buscarPedido(@PathVariable int id_pedido){
-        return pedidoService.getPedido(id_pedido);
-    }
-    //actualizar
-    @PutMapping("/{id_pedido}")
-    public int actualizarPedido(@PathVariable int id_pedido, @Valid @RequestBody Pedido pedido){
-        return pedidoService.updatePedido(pedido);
-    }
-    //eliminar
-    @DeleteMapping("/{id_pedido}")
-    public String eliminarPedido(@PathVariable int id_pedido){
-        if (pedidoService.deletePedido(id_pedido)== 1) {
-            return "Pedido eliminado correctamente";
-        }
-        return "Error al eliminar el pedido";
     }
 
+    // buscar
+    @GetMapping("/{id_pedido}")
+    @Operation(
+            summary = "Buscar pedido por ID",
+            description = "Obtiene un pedido según su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Pedido encontrado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Pedido.class))),
+            @ApiResponse(responseCode = "404",
+                    description = "Pedido no encontrado")
+    })
+    public Pedido buscarPedido(@PathVariable int id_pedido) {
+        return pedidoService.getPedido(id_pedido);
+    }
+
+    // actualizar
+    @PutMapping("/{id_pedido}")
+    @Operation(
+            summary = "Actualizar pedido",
+            description = "Actualiza un pedido existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Pedido actualizado correctamente"),
+            @ApiResponse(responseCode = "404",
+                    description = "Pedido no encontrado"),
+            @ApiResponse(responseCode = "400",
+                    description = "Datos inválidos")
+    })
+    public int actualizarPedido(
+            @PathVariable int id_pedido,
+            @Valid @RequestBody Pedido pedido) {
+
+        return pedidoService.updatePedido(pedido);
+    }
+
+    // eliminar
+    @DeleteMapping("/{id_pedido}")
+    @Operation(
+            summary = "Eliminar pedido",
+            description = "Elimina un pedido según su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Pedido eliminado correctamente"),
+            @ApiResponse(responseCode = "404",
+                    description = "Pedido no encontrado")
+    })
+    public String eliminarPedido(@PathVariable int id_pedido) {
+
+        if (pedidoService.deletePedido(id_pedido) == 1) {
+            return "Pedido eliminado correctamente";
+        }
+
+        return "Error al eliminar el pedido";
+    }
 }
